@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | College Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-icon">🎓</span>
+            <span>CollegeMaster Pro</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">📊 Dashboard</a></li>
+            <li><a href="students.html">👨‍🎓 Students</a></li>
+            <li><a href="courses.html">📚 Courses</a></li>
+            <li><a href="add-student.html">➕ Add Student</a></li>
+            <li><a href="about.html">ℹ️ About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+       <!-- Replace the hero section in index.html with this -->
+<div class="hero" style="background-image: linear-gradient(135deg, rgba(102,126,234,0.9), rgba(118,75,162,0.9)), url('https://tse2.mm.bing.net/th/id/OIP.YkT9b_gkhx3-Ktj4Rgh_lgHaEK?pid=Api&P=0&h=180'); background-size: cover; background-position: center;">
+    <h1>Welcome to CollegeMaster Pro 🎓</h1>
+    <p>Your complete solution for managing student records, courses, and academic data efficiently.</p>
+</div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon">👨‍🎓</div>
+                <div class="stat-info">
+                    <h3>Total Students</h3>
+                    <div class="stat-number" id="totalStudents">0</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📚</div>
+                <div class="stat-info">
+                    <h3>Active Courses</h3>
+                    <div class="stat-number" id="totalCourses">0</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-info">
+                    <h3>Completion Rate</h3>
+                    <div class="stat-number" id="completionRate">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>📋 Recently Enrolled Students</h2>
+                <a href="students.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">View All →</a>
+            </div>
+            <div class="table-wrapper">
+                <table id="recentTable">
+                    <thead>
+                        <tr><th>Student Name</th><th>Email</th><th>Course</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="recentList"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function initData() {
+            if (!localStorage.getItem('courses')) {
+                let defaultCourses = [
+                    { id: 1, name: 'Computer Science', code: 'CS101', credits: 4 },
+                    { id: 2, name: 'Business Administration', code: 'BA201', credits: 3 },
+                    { id: 3, name: 'Data Science', code: 'DS301', credits: 4 },
+                    { id: 4, name: 'Cybersecurity', code: 'CY401', credits: 3 }
+                ];
+                localStorage.setItem('courses', JSON.stringify(defaultCourses));
+            }
+
+            if (!localStorage.getItem('students')) {
+                let defaultStudents = [
+                    { id: 1, name: 'Emma Watson', email: 'emma@college.edu', course: 'Computer Science', enrolledDate: '2024-01-15' },
+                    { id: 2, name: 'James Wilson', email: 'james@college.edu', course: 'Data Science', enrolledDate: '2024-01-20' },
+                    { id: 3, name: 'Sophia Chen', email: 'sophia@college.edu', course: 'Cybersecurity', enrolledDate: '2024-02-01' }
+                ];
+                localStorage.setItem('students', JSON.stringify(defaultStudents));
+            }
+        }
+
+        function loadDashboard() {
+            let students = JSON.parse(localStorage.getItem('students')) || [];
+            let courses = JSON.parse(localStorage.getItem('courses')) || [];
+
+            document.getElementById('totalStudents').innerText = students.length;
+            document.getElementById('totalCourses').innerText = courses.length;
+            document.getElementById('completionRate').innerText = Math.floor(Math.random() * 30 + 70) + '%';
+
+            let recent = students.slice(-5).reverse();
+            let tbody = document.getElementById('recentList');
+            tbody.innerHTML = '';
+            recent.forEach(s => {
+                let row = tbody.insertRow();
+                row.insertCell(0).innerHTML = `<strong>${s.name}</strong>`;
+                row.insertCell(1).innerText = s.email;
+                row.insertCell(2).innerText = s.course;
+                row.insertCell(3).innerHTML = '<span style="color: #10b981;">✓ Active</span>';
+            });
+        }
+
+        initData();
+        loadDashboard();
+    </script>
+</body>
+</html>

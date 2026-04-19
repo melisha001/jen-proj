@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students | College Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-icon">🎓</span>
+            <span>CollegeMaster Pro</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">📊 Dashboard</a></li>
+            <li><a href="students.html" class="active">👨‍🎓 Students</a></li>
+            <li><a href="courses.html">📚 Courses</a></li>
+            <li><a href="add-student.html">➕ Add Student</a></li>
+            <li><a href="about.html">ℹ️ About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>👨‍🎓 Student Directory</h2>
+                <a href="add-student.html" class="btn btn-primary">+ Add New Student</a>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Name</th><th>Email</th><th>Course</th><th>Enrolled Date</th><th>Action</th></tr>
+                    </thead>
+                    <tbody id="studentList"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function displayStudents() {
+            let students = JSON.parse(localStorage.getItem('students')) || [];
+            let tbody = document.getElementById('studentList');
+            tbody.innerHTML = '';
+            students.forEach(s => {
+                let row = tbody.insertRow();
+                row.insertCell(0).innerText = s.id;
+                row.insertCell(1).innerHTML = `<strong>${s.name}</strong>`;
+                row.insertCell(2).innerText = s.email;
+                row.insertCell(3).innerText = s.course;
+                row.insertCell(4).innerText = s.enrolledDate || '2024-01-01';
+                let delCell = row.insertCell(5);
+                let delBtn = document.createElement('button');
+                delBtn.innerText = '🗑️ Delete';
+                delBtn.className = 'btn btn-danger';
+                delBtn.style.padding = '0.4rem 0.8rem';
+                delBtn.onclick = () => {
+                    if (confirm('Delete this student?')) {
+                        let updated = students.filter(st => st.id !== s.id);
+                        localStorage.setItem('students', JSON.stringify(updated));
+                        displayStudents();
+                    }
+                };
+                delCell.appendChild(delBtn);
+            });
+        }
+        displayStudents();
+    </script>
+</body>
+</html>
